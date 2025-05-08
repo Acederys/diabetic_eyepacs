@@ -1,0 +1,63 @@
+experiment:
+  name: "fundus_disease_classification"
+  seed: 42  # Фиксируем seed для воспроизводимости
+  deterministic: True  # Включаем детерминированность
+
+training:
+  device: "cuda"  # Используем GPU
+  num_epochs: 50
+  fine_tune_epochs: 50
+  early_stopping: True
+  patience: 5
+  learning_rate: 0.000001
+  batch_size: 128
+  optimizer: "adamW"
+  loss_function: "cross_entropy"
+  scheduler: "cosine"
+  weight_decay: 0.01
+  data_augmentation: True  # Включаем аугментации
+  model_save_path: "/content/model/"
+
+testing:
+  device: "cpu"  # Тестирование на CPU
+  batch_size: 16
+
+models:
+  resnet34:
+    pretrained: True
+    num_classes: 3
+  efficientnet_b4:
+    pretrained: True
+    num_classes: 3
+  vit:
+    model_name: "google/vit-base-patch16-224-in21k"
+    pretrained: True
+    num_classes: 3
+
+dataset:
+  train_csv: "/content/drive/MyDrive/Dissertation/Desertation_train_3model/дисертация_за_месяц/fold_0_train.csv"
+  val_csv: "/content/drive/MyDrive/Dissertation/Desertation_train_3model/дисертация_за_месяц/fold_0_val.csv"
+  test_csv: "/content/drive/MyDrive/Dissertation/Desertation_train_3model/дисертация_за_месяц/fold_0_val.csv"
+  image_size: 224
+  mean: [0.4264, 0.2979, 0.2135]
+  std: [0.2268, 0.1590, 0.1144]
+  num_workers: 4
+
+  train_transforms:
+    common:
+      - "resize"
+      - "color_jitter"
+      - "random_affine"
+      - "gaussian_blur"
+    1:
+      - "horizontal_flip"
+      - "vertical_flip"
+      - "random_erasing"
+    2:
+      - "horizontal_flip"
+      - "vertical_flip"
+      - "random_erasing"
+
+  test_transforms:
+    - "resize"
+    - "center_crop"
