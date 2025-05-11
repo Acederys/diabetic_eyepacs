@@ -56,7 +56,6 @@ The goal is to assess the effectiveness of modern neural architectures in classi
    ```bash
    git clone https://github.com/<your-username>/diabetic_eyepacs.git
    cd diabetic_eyepacs
-Понял! В таком случае, вот пример текста для `README.md`, который можно использовать для описания результатов:
 
 ---
 
